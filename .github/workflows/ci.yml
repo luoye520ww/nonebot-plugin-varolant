@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install --upgrade pip build
+      - run: python -m pip install .
+      - run: python -m unittest discover -s tests -v
+      - run: python -m compileall -q nonebot_plugin_varolant
+      - run: python -m build
+      - name: Check wheel contents and clean load
+        run: |
+          python - <<'PY'
+          import glob, zipfile
+          wheel = glob.glob("dist/*.whl")[0]
+          names = zipfile.ZipFile(wheel).namelist()
+          assert any(name.endswith("fontFamily.ttf") for name in names)
+          assert not any("/data/" in name or "/cache/" in name for name in names)
+          print("WHEEL_CONTENTS=PASS")
+          PY
+          python -m pip uninstall -y nonebot-plugin-varolant
+          python -m pip install dist/*.whl
+          cd "${RUNNER_TEMP}"
+          python - <<'PY'
+          import nonebot
+          nonebot.init()
+          assert nonebot.load_plugin("nonebot_plugin_varolant") is not None
+          print("CLEAN_WHEEL_LOAD=PASS")
+          PY
+      - name: Check tracked secrets
+        shell: bash
+        run: |
+          ! git ls-files | grep -Ei '(^|/)(\.env|.*cookie.*|.*token.*|.*\.har)$'
+          python - <<'PY'
+          import re
+          import subprocess
+          from pathlib import Path
+
+          patterns = {
+              "private-key": re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
+              "openai-key": re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b"),
+              "credential": re.compile(
+                  r"(?i)\b(?:access_token|tgp_ticket|authorization)\b"
+                  r"\s*[:=]\s*['\"][A-Za-z0-9._~+/=-]{20,}['\"]"
+              ),
+          }
+          failures = []
+          for name in subprocess.check_output(["git", "ls-files"], text=True).splitlines():
+              path = Path(name)
+              try:
+                  text = path.read_text(encoding="utf-8")
+              except (UnicodeDecodeError, OSError):
+                  continue
+              for line_no, line in enumerate(text.splitlines(), 1):
+                  for kind, pattern in patterns.items():
+                      if pattern.search(line):
+                          failures.append(f"{name}:{line_no}:{kind}")
+          if failures:
+              print("Potential tracked secrets:")
+              print("\n".join(failures))
+              raise SystemExit(1)
+          print("TRACKED_SECRET_CONTENTS=PASS")
+          PY
