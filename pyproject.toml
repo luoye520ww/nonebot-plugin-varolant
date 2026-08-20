@@ -1,0 +1,49 @@
+[project]
+name = "nonebot-plugin-varolant"
+version = "1.0.0"
+description = "面向 QQ 群的 NoneBot2 国服无畏契约助手：每日商店、皮肤监控与战绩卡片"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "luoye520ww", email = "100058663+luoye520ww@users.noreply.github.com" },
+]
+keywords = ["nonebot", "nonebot2", "onebot", "qq", "valorant", "无畏契约", "每日商店"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Communications :: Chat",
+]
+dependencies = [
+    "nonebot2[fastapi]>=2.2.0",
+    "nonebot-adapter-onebot>=2.4.0",
+    "nonebot-plugin-apscheduler>=0.3.0",
+    "aiohttp>=3.8.0",
+    "pillow>=10.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/luoye520ww/nonebot-plugin-varolant"
+Repository = "https://github.com/luoye520ww/nonebot-plugin-varolant"
+Issues = "https://github.com/luoye520ww/nonebot-plugin-varolant/issues"
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+includes = ["nonebot_plugin_varolant"]
+excludes = [
+    "nonebot_plugin_varolant/cache",
+    "nonebot_plugin_varolant/data",
+    "**/__pycache__",
+]
