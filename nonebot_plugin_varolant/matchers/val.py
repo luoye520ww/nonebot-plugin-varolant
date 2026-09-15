@@ -73,8 +73,8 @@ async def _wegame_bind(user_id: str) -> None:
 
 async def _qq_app_bind(user_id: str) -> None:
     await app_cmd.send("正在生成掌瓦 App QQ 登录二维码，请稍候...", reply_message=True)
-    ctx = await generate_qr_code(plugin_config.login_callback_url,
-                                 plugin_config.login_u1_url)
+    ctx = await generate_qr_code(plugin_config.varolant_login_callback_url,
+                                 plugin_config.varolant_login_u1_url)
     if not ctx:
         await app_cmd.finish("生成登录二维码失败，请稍后重试", reply_message=True)
         return
@@ -87,7 +87,7 @@ async def _qq_app_bind(user_id: str) -> None:
         login_data = await wait_for_login_result(
             session=session, ptqrtoken=ctx["ptqrtoken"],
             login_sig=ctx.get("login_sig", ""),
-            login_u1=ctx.get("u1_url", plugin_config.login_u1_url),
+            login_u1=ctx.get("u1_url", plugin_config.varolant_login_u1_url),
             referer_url=ctx.get("login_url", ""),
             pt_openlogin_data=ctx.get("pt_openlogin_data", ""),
             aegis_uid=ctx.get("aegis_uid", ""), jsver=ctx.get("jsver", "28d22679"),
@@ -143,8 +143,9 @@ async def _wx_app_bind(user_id: str) -> None:
 
 
 def _help_image() -> bytes:
-    return build_help_image(plugin_config.default_login_mode,
-                            plugin_config.monitor_time, plugin_config.timezone)
+    return build_help_image(plugin_config.varolant_default_login_mode,
+                            plugin_config.varolant_monitor_time,
+                            plugin_config.varolant_timezone)
 
 
 @help_cmd.handle()
@@ -253,7 +254,7 @@ async def _handle_app(event: MessageEvent, args: Tuple[Any, ...] = RegexGroup())
     if raw and (raw in HELP_ALIASES or lower in HELP_ALIASES):
         await app_cmd.finish(MessageSegment.image(_help_image()), reply_message=True)
     mode = normalize_login_mode(raw) if raw else (
-        normalize_login_mode(plugin_config.default_login_mode) or "wx"
+        normalize_login_mode(plugin_config.varolant_default_login_mode) or "wx"
     )
     if raw and not mode:
         await app_cmd.finish("参数无效：瓦app登录 qq / 瓦app登录 wx / 瓦app登录 清除", reply_message=True)

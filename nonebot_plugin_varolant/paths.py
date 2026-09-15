@@ -1,6 +1,7 @@
 import hashlib
 import re
 import shutil
+from functools import lru_cache
 from pathlib import Path
 
 from nonebot import require
@@ -14,6 +15,16 @@ _LEGACY_DATA_DIR = _PLUGIN_ROOT / "data"
 _DATA_MIGRATED = False
 
 
+@lru_cache(maxsize=1)
+def _data_dir() -> Path:
+    return localstore.get_plugin_data_dir()
+
+
+@lru_cache(maxsize=1)
+def _cache_dir() -> Path:
+    return localstore.get_plugin_cache_dir()
+
+
 def plugin_root() -> Path:
     """插件包根目录（nonebot_plugin_varolant/）。"""
     return _PLUGIN_ROOT
@@ -21,7 +32,7 @@ def plugin_root() -> Path:
 
 def data_dir() -> Path:
     global _DATA_MIGRATED
-    path = localstore.get_plugin_data_dir()
+    path = _data_dir()
     if not _DATA_MIGRATED and _LEGACY_DATA_DIR.exists():
         for source in _LEGACY_DATA_DIR.iterdir():
             target = path / source.name
@@ -32,7 +43,7 @@ def data_dir() -> Path:
 
 
 def cache_dir() -> Path:
-    return localstore.get_plugin_cache_dir()
+    return _cache_dir()
 
 
 def temp_user_dir(user_id: str) -> Path:

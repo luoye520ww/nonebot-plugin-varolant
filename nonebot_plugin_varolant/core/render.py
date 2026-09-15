@@ -1874,10 +1874,11 @@ def build_weapon_image(player: PlayerBrief, weapons: List[Dict[str, Any]]) -> by
     draw.text((margin + 22, 112),
               _truncate_text(draw, player.display, main_font, 350),
               fill=(230, 235, 241), font=main_font)
-    headers = [(430, "击杀"), (540, "场均"), (650, "爆头率"),
-               (780, "最远击杀"), (920, "伤害")]
+    headers = [(455, "击杀"), (565, "场均"), (690, "爆头率"),
+               (830, "最远击杀"), (950, "伤害")]
     for x, label in headers:
-        draw.text((x, 118), label, fill=(151, 161, 174), font=tiny_font)
+        draw.text((x, 128), label, fill=(151, 161, 174), font=tiny_font,
+                  anchor="mm")
     y = header_h + gap
     if not rows:
         _rounded_card(draw, (margin, y, width - margin, y + row_h), radius=13)
@@ -1900,14 +1901,15 @@ def build_weapon_image(player: PlayerBrief, weapons: List[Dict[str, Any]]) -> by
         if distance > 500:
             distance /= 100
         values = [
-            (430, str(_int_render(weapon.get("kill")))),
-            (540, f"{float(weapon.get('kill_avg') or 0):.2f}"),
-            (650, f"{float(weapon.get('head_shot_rate') or 0) * 100:.1f}%"),
-            (780, f"{distance:.1f}m"),
-            (920, f"{float(weapon.get('damage') or 0):.0f}"),
+            (455, str(_int_render(weapon.get("kill")))),
+            (565, f"{float(weapon.get('kill_avg') or 0):.2f}"),
+            (690, f"{float(weapon.get('head_shot_rate') or 0) * 100:.1f}%"),
+            (830, f"{distance:.1f}m"),
+            (950, f"{float(weapon.get('damage') or 0):.0f}"),
         ]
         for x, value in values:
-            draw.text((x, y + 23), value, fill=_TITLE, font=small_font)
+            draw.text((x, y + row_h // 2), value, fill=_TITLE,
+                      font=small_font, anchor="mm")
         y += row_h + gap
     _draw_tip(draw, width, height - footer_h + 16,
               "国服无畏契约数据卡 · 仅展示接口返回资料", small_font)

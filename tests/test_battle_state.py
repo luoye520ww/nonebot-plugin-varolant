@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import nonebot
 
-nonebot.init()
+nonebot.init(driver="~none")
 
 from nonebot_plugin_varolant.core import gameinfo, names, render
 from nonebot_plugin_varolant.core.render import (
@@ -157,6 +157,19 @@ class BattleTeamStateTest(unittest.TestCase):
             [{"name": "未知的超长武器名称", "kill": 1, "image_path": "MISSING"}],
         )
         self.assertTrue(rendered.startswith(b"\xff\xd8"))
+
+    def test_weapon_meta_can_resolve_chinese_api_name(self):
+        meta = gameinfo.weapon_meta({"weapons": [{
+            "guid": "weapon-guid",
+            "name": {"cn": "狂徒", "en": "Vandal"},
+            "type": {"cn": "步枪", "en": "Rifle"},
+            "picture_url": "https://example.invalid/vandal.png",
+        }]})
+        self.assertEqual(meta["狂徒"]["name"], "狂徒")
+        self.assertEqual(
+            meta["狂徒"]["picture_url"],
+            "https://example.invalid/vandal.png",
+        )
 
     def test_all_matcher_messages_quote_the_trigger(self):
         matcher_dir = Path(__file__).parents[1] / "nonebot_plugin_varolant" / "matchers"

@@ -42,8 +42,8 @@ async def _handle_monitor(event: MessageEvent, args: Tuple[Any, ...] = RegexGrou
             "商店监控 开启 - 启用自动查询\n"
             "商店监控 关闭 - 停用自动查询\n\n"
             f"当前自动查询状态：{auto_check_status}\n"
-            f"监控时间：{plugin_config.monitor_time}\n"
-            f"时区：{plugin_config.timezone}"
+            f"监控时间：{plugin_config.varolant_monitor_time}\n"
+            f"时区：{plugin_config.varolant_timezone}"
         )
         await monitor_cmd.finish(help_text, reply_message=True)
 
@@ -104,8 +104,8 @@ async def _handle_monitor(event: MessageEvent, args: Tuple[Any, ...] = RegexGrou
         await database.update_auto_check(user_id, 1)
         await monitor_cmd.finish(
             f"已开启自动查询\n"
-            f"每天 {plugin_config.monitor_time} "
-            f"({plugin_config.timezone}) 执行\n"
+            f"每天 {plugin_config.varolant_monitor_time} "
+            f"({plugin_config.varolant_timezone}) 执行\n"
             "监控到上架后会自动通知你",
             reply_message=True,
         )

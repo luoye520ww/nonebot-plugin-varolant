@@ -592,12 +592,20 @@ async def _handle_weapon(event: MessageEvent):
         meta = gameinfo.weapon_meta(await gameinfo.load_gameinfo())
         urls: List[str] = []
         for weapon in weapons:
-            raw_name = str(weapon.get("name") or "")
-            weapon_id = str(
-                weapon.get("guid") or weapon.get("weaponId")
-                or weapon.get("weapon_id") or raw_name
-            ).lower()
-            info = meta.get(weapon_id) or meta.get(raw_name.lower()) or {}
+            raw_name = str(
+                weapon.get("name") or weapon.get("weaponName")
+                or weapon.get("weapon_name") or ""
+            )
+            lookup_keys = (
+                weapon.get("guid"), weapon.get("weaponGuid"),
+                weapon.get("weapon_guid"), weapon.get("weaponId"),
+                weapon.get("weapon_id"), raw_name,
+            )
+            info = next(
+                (meta[str(key).strip().lower()] for key in lookup_keys
+                 if key and str(key).strip().lower() in meta),
+                {},
+            )
             weapon["name"] = info.get("name") or (
                 raw_name if len(raw_name) < 24 else f"武器-{raw_name[:8]}"
             )

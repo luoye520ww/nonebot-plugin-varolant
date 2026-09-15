@@ -36,7 +36,7 @@ jobs:
           cd "${RUNNER_TEMP}"
           python - <<'PY'
           import nonebot
-          nonebot.init()
+          nonebot.init(driver="~none")
           assert nonebot.load_plugin("nonebot_plugin_varolant") is not None
           print("CLEAN_WHEEL_LOAD=PASS")
           PY

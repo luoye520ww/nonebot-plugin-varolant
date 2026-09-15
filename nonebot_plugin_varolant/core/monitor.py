@@ -66,8 +66,8 @@ def _pick_bot(config: Config):
     bots = get_bots()
     if not bots:
         return None
-    if config.bot_id and config.bot_id in bots:
-        return bots[config.bot_id]
+    if config.varolant_bot_id and config.varolant_bot_id in bots:
+        return bots[config.varolant_bot_id]
     # 未配置或配置的号当前不在线时，退化为第一个在线机器人
     return next(iter(bots.values()))
 

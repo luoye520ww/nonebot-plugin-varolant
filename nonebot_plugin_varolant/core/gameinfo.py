@@ -160,6 +160,9 @@ def weapon_meta(data: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
         english_key = english.lower()
         if english_key:
             out[english_key] = info
+        chinese_key = chinese.strip().lower()
+        if chinese_key:
+            out[chinese_key] = info
         if english_key == "tacticalknife":
             out["melee"] = info
     return out

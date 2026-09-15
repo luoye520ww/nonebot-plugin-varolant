@@ -63,26 +63,31 @@ def _setup_scheduler() -> None:
     """按配置把每日监控挂到 apscheduler。"""
     hour, minute = 8, 1
     try:
-        hour_s, minute_s = str(plugin_config.monitor_time or "08:01").split(":", 1)
+        hour_s, minute_s = str(
+            plugin_config.varolant_monitor_time or "08:01"
+        ).split(":", 1)
         hour, minute = int(hour_s), int(minute_s)
         if not (0 <= hour <= 23 and 0 <= minute <= 59):
             raise ValueError
     except (ValueError, AttributeError):
         logger.warning(
-            f"monitor_time 配置无效: {plugin_config.monitor_time}，回退为 08:01"
+            "varolant_monitor_time 配置无效: "
+            f"{plugin_config.varolant_monitor_time}，回退为 08:01"
         )
         hour, minute = 8, 1
-        plugin_config.monitor_time = "08:01"
+        plugin_config.varolant_monitor_time = "08:01"
 
     from apscheduler.triggers.cron import CronTrigger
 
-    tz_name = plugin_config.timezone or "Asia/Shanghai"
+    tz_name = plugin_config.varolant_timezone or "Asia/Shanghai"
     try:
         trigger = CronTrigger(hour=hour, minute=minute, timezone=tz_name)
     except Exception:
-        logger.warning(f"timezone 配置无效: {tz_name}，回退为 Asia/Shanghai")
+        logger.warning(
+            f"varolant_timezone 配置无效: {tz_name}，回退为 Asia/Shanghai"
+        )
         tz_name = "Asia/Shanghai"
-        plugin_config.timezone = tz_name
+        plugin_config.varolant_timezone = tz_name
         trigger = CronTrigger(hour=hour, minute=minute, timezone="Asia/Shanghai")
 
     scheduler.add_job(

@@ -145,6 +145,7 @@ _MODE_NAMES = {
     "deathmatch": "团队死斗", "ggteam": "武装升级", "onefa": "非排位",
     "gungame": "枪王之王", "hurm": "极速竞技", "swiftplay": "超速冲点",
     "premier": "冠军巡回赛", "custom": "自定义", "newmap": "一般模式",
+    "skirmish2v2": "斗牛2v2",
 }
 
 

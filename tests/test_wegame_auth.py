@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, patch
 
 import nonebot
 
-nonebot.init()
+nonebot.init(driver="~none")
 
 from nonebot_plugin_varolant.core import database, mval, store, wegame
 from nonebot_plugin_varolant.core.wegame import WegameClient
