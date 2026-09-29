@@ -171,6 +171,27 @@ class BattleTeamStateTest(unittest.TestCase):
             "https://example.invalid/vandal.png",
         )
 
+    def test_new_weapons_resolve_by_id_guid_and_localized_name(self):
+        weapons = [
+            (19, "outlaw-guid", "Outlaw", "莽侠"),
+            (20, "bandit-guid", "Bandit", "追猎"),
+            (21, "warden-guid", "warden", "悍狼"),
+        ]
+        meta = gameinfo.weapon_meta({"weapons": [
+            {
+                "id": weapon_id,
+                "guid": guid,
+                "name": {"cn": "�", "en": english},
+                "type": {"cn": "步枪"},
+                "picture_url": f"https://example.invalid/{english}.png",
+            }
+            for weapon_id, guid, english, _ in weapons
+        ]})
+        for weapon_id, guid, english, chinese in weapons:
+            for key in (str(weapon_id), guid, english.lower(), chinese):
+                self.assertEqual(meta[key]["name"], chinese)
+                self.assertTrue(meta[key]["picture_url"].endswith(f"/{english}.png"))
+
     def test_all_matcher_messages_quote_the_trigger(self):
         matcher_dir = Path(__file__).parents[1] / "nonebot_plugin_varolant" / "matchers"
         missing = []

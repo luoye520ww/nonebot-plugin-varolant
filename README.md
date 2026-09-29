@@ -33,6 +33,8 @@ _面向 QQ 群的 NoneBot2 无畏契约助手_
 
 ## 效果图
 
+以下卡片使用演示数据生成，特工与武器图片来自游戏资源接口。
+
 <details>
 <summary>查看帮助图</summary>
 
@@ -43,21 +45,21 @@ _面向 QQ 群的 NoneBot2 无畏契约助手_
 <details>
 <summary>查看双方 10 人单场详情</summary>
 
-![双方 10 人详情](https://raw.githubusercontent.com/luoye520ww/nonebot-plugin-varolant/main/docs/images/battle-detail.jpg)
+![双方 10 人详情](https://raw.githubusercontent.com/luoye520ww/nonebot-plugin-varolant/main/docs/images/battle-detail.jpg?v=20260929)
 
 </details>
 
 <details>
 <summary>查看武器击杀卡片</summary>
 
-![武器击杀](https://raw.githubusercontent.com/luoye520ww/nonebot-plugin-varolant/main/docs/images/weapons.jpg)
+![武器击杀](https://raw.githubusercontent.com/luoye520ww/nonebot-plugin-varolant/main/docs/images/weapons.jpg?v=20260929)
 
 </details>
 
 <details>
 <summary>查看近期战绩卡片</summary>
 
-![近期战绩](https://raw.githubusercontent.com/luoye520ww/nonebot-plugin-varolant/main/docs/images/stats.jpg)
+![近期战绩](https://raw.githubusercontent.com/luoye520ww/nonebot-plugin-varolant/main/docs/images/stats.jpg?v=20260929)
 
 </details>
 

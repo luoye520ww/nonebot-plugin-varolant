@@ -20,7 +20,8 @@ _WEAPON_CN = {
     "sheriff": "正义", "stinger": "蜂刺", "spectre": "骇灵", "bucky": "雄鹿",
     "judge": "判官", "bulldog": "獠犬", "guardian": "戍卫", "phantom": "幻影",
     "vandal": "狂徒", "marshal": "飞将", "operator": "冥驹", "ares": "战神",
-    "odin": "奥丁", "outlaw": "追猎", "tacticalknife": "近战武器",
+    "odin": "奥丁", "outlaw": "莽侠", "bandit": "追猎",
+    "warden": "悍狼", "tacticalknife": "近战武器",
 }
 
 # CDN 失效时的兜底赛季（抓包日期 2026-08，2026赛季 第四幕）
@@ -139,7 +140,7 @@ def map_meta(data: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
 
 
 def weapon_meta(data: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
-    """武器 GUID/英文名(小写) → {name, type, picture_url}。"""
+    """武器 ID/GUID/中英文名(小写) → {name, type, picture_url}。"""
     out: Dict[str, Dict[str, str]] = {}
     for weapon in data.get("weapons") or []:
         guid = str(weapon.get("guid") or "").lower()
@@ -157,6 +158,9 @@ def weapon_meta(data: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
             "picture_url": str(weapon.get("picture_url") or ""),
         }
         out[guid] = info
+        weapon_id = str(weapon.get("id") or "").strip()
+        if weapon_id:
+            out[weapon_id] = info
         english_key = english.lower()
         if english_key:
             out[english_key] = info
